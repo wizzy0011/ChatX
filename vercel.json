@@ -2,6 +2,5 @@
   "framework": "nextjs",
   "buildCommand": "next build",
   "outputDirectory": null,
-  "devCommand": "next dev",
-  "env": []
+  "devCommand": "next dev"
 }
