@@ -58,7 +58,7 @@ export function EmailEntryScreen({
               What's your email?
             </h2>
             <p className="text-slate-400 text-sm mb-4">
-              We'll send you a 6-digit code to verify your identity.
+              We'll send a 6-digit verification code.
             </p>
           </div>
 
