@@ -1,8 +1,10 @@
 "use client";
 
-import { X, ChevronRight, Moon, Sun } from "lucide-react";
+import { X, ChevronRight, Moon, Sun, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "./ThemeProvider";
+import { useAuth } from "@/lib/auth-context";
+import { LogoutConfirmation } from "./auth/LogoutConfirmation";
 import {
   SubscriptionPage,
   AccountPage,
@@ -24,7 +26,18 @@ interface SettingsContentProps {
 
 export function SettingsContent({ onClose }: SettingsContentProps) {
   const { isDarkMode, toggleTheme } = useTheme();
+  const { signOut } = useAuth();
   const [currentPage, setCurrentPage] = useState<string | null>(null);
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await signOut();
+    setIsLoggingOut(false);
+    setIsLogoutOpen(false);
+    onClose();
+  };
 
   const settingsSections = [
     {
@@ -182,6 +195,17 @@ export function SettingsContent({ onClose }: SettingsContentProps) {
                   </div>
                 ))}
 
+                {/* Sign Out Section */}
+                <div className="border-t border-slate-700 mt-8">
+                  <button
+                    onClick={() => setIsLogoutOpen(true)}
+                    className="w-full px-6 py-3 flex items-center gap-3 hover:bg-slate-800 active:bg-slate-700 transition-all text-red-400 hover:text-red-300 active:scale-95 origin-left"
+                  >
+                    <LogOut size={18} />
+                    <span className="text-sm font-medium">Sign Out</span>
+                  </button>
+                </div>
+
                 {/* Bottom padding */}
                 <div className="h-6" />
               </div>
@@ -189,6 +213,14 @@ export function SettingsContent({ onClose }: SettingsContentProps) {
           )}
         </div>
       </div>
+
+      {/* Logout Confirmation */}
+      <LogoutConfirmation
+        isOpen={isLogoutOpen}
+        onConfirm={handleLogout}
+        onCancel={() => setIsLogoutOpen(false)}
+        isLoading={isLoggingOut}
+      />
     </>
   );
 }
