@@ -6,19 +6,35 @@ interface HomeMenuProps {
   isOpen: boolean;
   onClose: () => void;
   onSettings: () => void;
+  onNewGroup: () => void;
+  onNewBroadcast: () => void;
+  onLinkedDevices: () => void;
+  onStarredMessages: () => void;
+  onReadAll: () => void;
+  onSwitchAccount: () => void;
 }
 
-export function HomeMenu({ isOpen, onClose, onSettings }: HomeMenuProps) {
+export function HomeMenu({
+  isOpen,
+  onClose,
+  onSettings,
+  onNewGroup,
+  onNewBroadcast,
+  onLinkedDevices,
+  onStarredMessages,
+  onReadAll,
+  onSwitchAccount,
+}: HomeMenuProps) {
   if (!isOpen) return null;
 
   const menuItems = [
-    { icon: Users, label: "New Group" },
-    { icon: Share2, label: "New Broadcast" },
-    { icon: Smartphone, label: "Linked Devices" },
-    { icon: MessageSquare, label: "Starred Messages" },
-    { icon: CheckSquare, label: "Read All" },
+    { icon: Users, label: "New Group", onClick: onNewGroup },
+    { icon: Share2, label: "New Broadcast", onClick: onNewBroadcast },
+    { icon: Smartphone, label: "Linked Devices", onClick: onLinkedDevices },
+    { icon: MessageSquare, label: "Starred Messages", onClick: onStarredMessages },
+    { icon: CheckSquare, label: "Read All", onClick: onReadAll },
     { icon: Settings, label: "Settings", onClick: onSettings },
-    { icon: LogOut, label: "Switch Account" },
+    { icon: LogOut, label: "Switch Account", onClick: onSwitchAccount },
   ];
 
   return (
