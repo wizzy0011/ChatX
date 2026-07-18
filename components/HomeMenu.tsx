@@ -1,0 +1,62 @@
+"use client";
+
+import { X, Users, Share2, Smartphone, MessageSquare, CheckSquare, Settings, LogOut } from "lucide-react";
+
+interface HomeMenuProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSettings: () => void;
+}
+
+export function HomeMenu({ isOpen, onClose, onSettings }: HomeMenuProps) {
+  if (!isOpen) return null;
+
+  const menuItems = [
+    { icon: Users, label: "New Group" },
+    { icon: Share2, label: "New Broadcast" },
+    { icon: Smartphone, label: "Linked Devices" },
+    { icon: MessageSquare, label: "Starred Messages" },
+    { icon: CheckSquare, label: "Read All" },
+    { icon: Settings, label: "Settings", onClick: onSettings },
+    { icon: LogOut, label: "Switch Account" },
+  ];
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/60 z-30 max-w-md:max-w-full"
+        onClick={onClose}
+      />
+
+      {/* Menu */}
+      <div className="fixed top-0 right-0 bottom-0 w-64 bg-slate-900 border-l border-slate-700 z-40 flex flex-col max-w-md:w-64">
+        <div className="flex items-center justify-between p-4 border-b border-slate-700">
+          <h2 className="text-lg font-bold text-slate-100">Menu</h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-slate-800 rounded-full transition-colors"
+          >
+            <X size={20} className="text-slate-400" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto">
+          {menuItems.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                if (item.onClick) item.onClick();
+                onClose();
+              }}
+              className="w-full px-4 py-3 flex items-center gap-4 text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors border-b border-slate-700 last:border-b-0"
+            >
+              <item.icon size={20} />
+              <span className="text-sm font-medium">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
