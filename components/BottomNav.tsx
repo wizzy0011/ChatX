@@ -22,11 +22,12 @@ export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
           <button
             key={id}
             onClick={() => onTabChange(id)}
-            className={`flex flex-col items-center justify-center w-20 py-3 gap-1 transition-colors ${
+            className={`flex flex-col items-center justify-center w-20 py-3 gap-1 transition-all active:scale-90 rounded-lg ${
               activeTab === id
                 ? "text-blue-500"
-                : "text-slate-400 hover:text-slate-300"
+                : "text-slate-400 hover:text-slate-300 hover:bg-slate-800 active:bg-slate-700"
             }`}
+            aria-label={`Go to ${label}`}
           >
             <Icon size={24} />
             <span className="text-xs font-medium">{label}</span>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { ChatHeader } from "@/components/ChatHeader";
 import { FilterRow } from "@/components/FilterRow";
 import { ChatsTab } from "@/components/ChatsTab";
@@ -12,12 +13,11 @@ import { FAB } from "@/components/FAB";
 import { HomeMenu } from "@/components/HomeMenu";
 import { SettingsScreen } from "@/components/SettingsScreen";
 
-export default function Home() {
+function HomeContent() {
   const [activeTab, setActiveTab] = useState("chats");
   const [activeFilter, setActiveFilter] = useState("All");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -30,11 +30,6 @@ export default function Home() {
 
   const handleCloseSettings = () => {
     setIsSettingsOpen(false);
-  };
-
-  const handleThemeChange = (isDark: boolean) => {
-    setIsDarkMode(isDark);
-    // In Phase 2, this would actually toggle the theme
   };
 
   const handleFABClick = () => {
@@ -72,12 +67,15 @@ export default function Home() {
       />
 
       {/* Settings Screen */}
-      <SettingsScreen
-        isOpen={isSettingsOpen}
-        onClose={handleCloseSettings}
-        isDarkMode={isDarkMode}
-        onThemeChange={handleThemeChange}
-      />
+      <SettingsScreen isOpen={isSettingsOpen} onClose={handleCloseSettings} />
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <ThemeProvider>
+      <HomeContent />
+    </ThemeProvider>
   );
 }

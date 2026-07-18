@@ -12,7 +12,8 @@ export function ChatHeader({ onMenuClick }: ChatHeaderProps) {
       <h1 className="text-2xl font-bold text-slate-100">ChatX</h1>
       <button
         onClick={onMenuClick}
-        className="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-300"
+        className="p-2 hover:bg-slate-800 active:bg-slate-700 rounded-full transition-all active:scale-95 text-slate-300 hover:text-slate-100"
+        aria-label="Open menu"
       >
         <Menu size={24} />
       </button>

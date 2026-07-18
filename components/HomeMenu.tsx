@@ -35,7 +35,8 @@ export function HomeMenu({ isOpen, onClose, onSettings }: HomeMenuProps) {
           <h2 className="text-lg font-bold text-slate-100">Menu</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-slate-800 rounded-full transition-colors"
+            className="p-2 hover:bg-slate-800 active:bg-slate-700 rounded-full transition-all active:scale-95"
+            aria-label="Close menu"
           >
             <X size={20} className="text-slate-400" />
           </button>
@@ -49,7 +50,7 @@ export function HomeMenu({ isOpen, onClose, onSettings }: HomeMenuProps) {
                 if (item.onClick) item.onClick();
                 onClose();
               }}
-              className="w-full px-4 py-3 flex items-center gap-4 text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors border-b border-slate-700 last:border-b-0"
+              className="w-full px-4 py-3 flex items-center gap-4 text-slate-300 hover:bg-slate-800 active:bg-slate-700 hover:text-slate-100 transition-all active:scale-95 origin-left border-b border-slate-700 last:border-b-0"
             >
               <item.icon size={20} />
               <span className="text-sm font-medium">{item.label}</span>

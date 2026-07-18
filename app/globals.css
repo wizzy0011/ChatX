@@ -41,3 +41,101 @@ html, body {
   display: flex;
   flex-direction: column;
 }
+
+/* Smooth transitions for theme switching */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.light {
+  @apply bg-slate-50;
+  --color-bg: #f8fafc;
+}
+
+html.light body {
+  @apply bg-slate-50 text-slate-900;
+}
+
+html.light .bg-black {
+  @apply bg-slate-50;
+}
+
+html.light .bg-slate-900 {
+  @apply bg-slate-100;
+}
+
+html.light .bg-slate-800 {
+  @apply bg-slate-200;
+}
+
+html.light .bg-slate-700 {
+  @apply bg-slate-300;
+}
+
+html.light .text-slate-100 {
+  @apply text-slate-900;
+}
+
+html.light .text-slate-300 {
+  @apply text-slate-600;
+}
+
+html.light .text-slate-400 {
+  @apply text-slate-500;
+}
+
+html.light .border-slate-700 {
+  @apply border-slate-300;
+}
+
+/* Button press animations */
+button {
+  @apply transition-all duration-200;
+}
+
+button:active {
+  @apply scale-95;
+}
+
+/* Smooth panel animations */
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToBottom {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.animate-in {
+  animation: slideInFromBottom 0.3s ease-out;
+}
+
+.animate-out {
+  animation: slideOutToBottom 0.3s ease-in;
+}
+
+/* Ripple effect helper */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}

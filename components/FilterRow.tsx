@@ -15,10 +15,10 @@ export function FilterRow({ activeFilter, onFilterChange }: FilterRowProps) {
           <button
             key={filter}
             onClick={() => onFilterChange(filter)}
-            className={`px-4 py-2 rounded-full font-medium text-sm transition-colors flex-shrink-0 ${
+            className={`px-4 py-2 rounded-full font-medium text-sm transition-all flex-shrink-0 active:scale-95 ${
               activeFilter === filter
-                ? "bg-blue-600 text-white"
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                ? "bg-blue-600 text-white active:bg-blue-700"
+                : "bg-slate-800 text-slate-300 hover:bg-slate-700 active:bg-slate-600"
             }`}
           >
             {filter}
