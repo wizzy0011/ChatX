@@ -4,12 +4,14 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { createClient } from './supabase/client';
 
-interface Profile {
+export interface Profile {
   id: string;
   email: string;
   username: string | null;
   display_name: string | null;
   avatar_url: string | null;
+  bio: string;
+  status: string;
   created_at: string;
   updated_at: string;
 }
@@ -19,9 +21,10 @@ interface AuthContextType {
   user: User | null;
   profile: Profile | null;
   isLoading: boolean;
-  signInWithOtp: (email: string) => Promise<{ error: Error | null }>;
-  verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>;
+  signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<{ error: Error | null }>;
+  updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null }>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -105,13 +108,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const signInWithOtp = async (email: string) => {
+  const signInWithGoogle = async () => {
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
+      const redirectUrl =
+        process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
+        `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`;
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
         options: {
-          shouldCreateUser: true,
+          redirectTo: redirectUrl,
         },
       });
       return { error };
@@ -120,17 +127,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const verifyOtp = async (email: string, token: string) => {
+  const updateProfile = async (
+    updates: Partial<Profile>
+  ) => {
     try {
+      if (!user) throw new Error('No user logged in');
+
       const supabase = createClient();
-      const { error } = await supabase.auth.verifyOtp({
-        email,
-        token,
-        type: 'email',
-      });
-      return { error };
+
+      // Check username uniqueness if username is being updated
+      if (updates.username && updates.username !== profile?.username) {
+        const { data: existing } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('username', updates.username)
+          .neq('id', user.id)
+          .single();
+
+        if (existing) {
+          throw new Error('Username already taken');
+        }
+      }
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setProfile(data);
+      }
+
+      return { error: null };
     } catch (error) {
       return { error: error as Error };
+    }
+  };
+
+  const refreshProfile = async () => {
+    try {
+      if (!user) return;
+
+      const supabase = createClient();
+      const { data: profileData, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+
+      if (profileData) {
+        setProfile(profileData);
+      }
+    } catch (error) {
+      console.error('[AuthProvider] Error refreshing profile:', error);
     }
   };
 
@@ -154,9 +212,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         profile,
         isLoading,
-        signInWithOtp,
-        verifyOtp,
+        signInWithGoogle,
         signOut,
+        updateProfile,
+        refreshProfile,
       }}
     >
       {children}

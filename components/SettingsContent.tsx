@@ -1,10 +1,11 @@
 "use client";
 
-import { X, ChevronRight, Moon, Sun, LogOut } from "lucide-react";
+import { X, ChevronRight, Moon, Sun, LogOut, Edit2 } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "./ThemeProvider";
 import { useAuth } from "@/lib/auth-context";
 import { LogoutConfirmation } from "./auth/LogoutConfirmation";
+import { ProfileEditScreen } from "./ProfileEditScreen";
 import {
   SubscriptionPage,
   AccountPage,
@@ -26,10 +27,11 @@ interface SettingsContentProps {
 
 export function SettingsContent({ onClose }: SettingsContentProps) {
   const { isDarkMode, toggleTheme } = useTheme();
-  const { signOut } = useAuth();
+  const { signOut, profile } = useAuth();
   const [currentPage, setCurrentPage] = useState<string | null>(null);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isProfileEditOpen, setIsProfileEditOpen] = useState(false);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -140,6 +142,45 @@ export function SettingsContent({ onClose }: SettingsContentProps) {
 
               {/* Scrollable Content */}
               <div className="flex-1 overflow-y-auto">
+                {/* Profile Section */}
+                {profile && (
+                  <div className="px-6 py-4 border-b border-slate-700">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="w-12 h-12 bg-slate-700 rounded-full overflow-hidden flex-shrink-0">
+                          {profile.avatar_url ? (
+                            <img
+                              src={profile.avatar_url}
+                              alt="Profile"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <div className="text-lg font-bold text-slate-500">
+                                {profile.display_name?.charAt(0).toUpperCase()}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-slate-100 truncate">
+                            {profile.display_name}
+                          </p>
+                          <p className="text-xs text-slate-400 truncate">
+                            @{profile.username}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setIsProfileEditOpen(true)}
+                        className="p-2 hover:bg-slate-800 rounded-lg transition-all active:scale-95 text-blue-500"
+                      >
+                        <Edit2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {/* Theme Toggle */}
                 <div className="px-6 py-4 border-b border-slate-700">
                   <div className="flex items-center justify-between">
@@ -220,6 +261,12 @@ export function SettingsContent({ onClose }: SettingsContentProps) {
         onConfirm={handleLogout}
         onCancel={() => setIsLogoutOpen(false)}
         isLoading={isLoggingOut}
+      />
+
+      {/* Profile Edit Screen */}
+      <ProfileEditScreen
+        isOpen={isProfileEditOpen}
+        onClose={() => setIsProfileEditOpen(false)}
       />
     </>
   );
