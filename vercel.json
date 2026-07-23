@@ -3,5 +3,12 @@
   "buildCommand": "next build",
   "outputDirectory": null,
   "devCommand": "next dev",
-  "env": []
+  "env": {
+    "NEXT_PUBLIC_APPWRITE_ENDPOINT": {
+      "description": "Appwrite API endpoint URL"
+    },
+    "NEXT_PUBLIC_APPWRITE_PROJECT_ID": {
+      "description": "Appwrite project ID"
+    }
+  }
 }
