@@ -1,6 +1,6 @@
 "use client";
 
-import { mockChats, Chat } from "@/lib/mockData";
+import { useChats } from "@/lib/use-data";
 import { ChatItem } from "./ChatItem";
 
 interface ChatsTabProps {
@@ -8,16 +8,18 @@ interface ChatsTabProps {
 }
 
 export function ChatsTab({ filter }: ChatsTabProps) {
-  const getFilteredChats = (): Chat[] => {
+  const { chats, loading } = useChats();
+
+  const getFilteredChats = () => {
     switch (filter) {
       case "Unread":
-        return mockChats.filter((chat) => chat.unread > 0);
+        return chats.filter((chat) => chat.unread > 0);
       case "Favorites":
-        return mockChats.filter((chat) => chat.isPinned);
+        return chats.filter((chat) => chat.isPinned);
       case "Groups":
-        return mockChats.filter((chat) => chat.isGroup);
+        return chats.filter((chat) => chat.isGroup);
       default:
-        return mockChats;
+        return chats;
     }
   };
 
@@ -25,7 +27,11 @@ export function ChatsTab({ filter }: ChatsTabProps) {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      {filteredChats.length > 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center h-full text-slate-400">
+          <p>Loading chats...</p>
+        </div>
+      ) : filteredChats.length > 0 ? (
         filteredChats.map((chat) => <ChatItem key={chat.id} chat={chat} />)
       ) : (
         <div className="flex items-center justify-center h-full text-slate-400">
