@@ -34,7 +34,11 @@ export default function Home() {
 
   const handleThemeChange = (isDark: boolean) => {
     setIsDarkMode(isDark);
-    // In Phase 2, this would actually toggle the theme
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   };
 
   const handleFABClick = () => {

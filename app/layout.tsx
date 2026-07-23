@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/lib/auth-context";
 
 export const metadata: Metadata = {
   title: "ChatX",
@@ -22,11 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-black">
-        <AuthProvider>
-          <div className="mx-auto bg-black text-slate-100 flex flex-col h-screen max-w-md">
-            {children}
-          </div>
-        </AuthProvider>
+        <div className="mx-auto bg-black text-slate-100 flex flex-col h-screen max-w-md">
+          {children}
+        </div>
       </body>
     </html>
   );

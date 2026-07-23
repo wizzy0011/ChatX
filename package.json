@@ -7,11 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "setup-appwrite": "node scripts/setup-appwrite.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
-    "appwrite": "^26.2.0",
     "lucide-react": "^0.408.0",
     "next": "16.2.10",
     "react": "^19.2.0",
